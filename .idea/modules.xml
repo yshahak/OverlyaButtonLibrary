@@ -3,6 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/OverlyaButtonLibrary.iml" filepath="$PROJECT_DIR$/OverlyaButtonLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OverlyaButtonLibrary.iml" filepath="$PROJECT_DIR$/OverlyaButtonLibrary.iml" />
+      <module fileurl="file://$PROJECT_DIR$/overlaybuttonlibrary/overlaybuttonlibrary.iml" filepath="$PROJECT_DIR$/overlaybuttonlibrary/overlaybuttonlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/overlaybuttonlibrary/overlaybuttonlibrary.iml" filepath="$PROJECT_DIR$/overlaybuttonlibrary/overlaybuttonlibrary.iml" />
     </modules>
   </component>
