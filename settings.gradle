@@ -1,1 +1,1 @@
-include ':overlaybuttonlibrary'
+include ':overlaybuttonlibrary', ':demo'
