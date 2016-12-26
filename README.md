@@ -1,6 +1,6 @@
  [ ![Download](https://api.bintray.com/packages/yshahak/OverlyaButtonLibrary/OverlyaButtonLibrary/images/download.svg) ](https://bintray.com/yshahak/OverlyaButtonLibrary/OverlyaButtonLibrary/_latestVersion)
 # OverlyaButtonLibrary
-Esaily show a Button or other View, even when you app is in the background.
+Esaily show a Button or other View on top of any other app, even when your app is in the background.
 
 #Usage
 * __In order to use this library you muse target your project to API 22 or below:__
