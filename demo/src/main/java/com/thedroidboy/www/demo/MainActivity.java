@@ -10,20 +10,23 @@ import com.thedroidboy.www.overlaybuttonlibrary.OverlayButton;
 
 public class MainActivity extends AppCompatActivity {
 
+    private View.OnClickListener clickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Toast.makeText(view.getContext(), "button clicked!", Toast.LENGTH_SHORT).show();
+            clickListener = null;
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        OverlayButton button =  new OverlayButton.Builder(this)
-                .setLayoutId(R.layout.my_button)
-                .setGravity(Gravity.BOTTOM | Gravity.LEFT)
-                .setClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                       Toast.makeText(view.getContext(), "button clicked!", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .build();
-        button.show();
+        new OverlayButton.Builder(this)
+                .setLayoutId(R.layout.my_button) //optionally define your own layout for the Button
+                .setGravity(Gravity.BOTTOM | Gravity.END) //optionally define your desired Gravitiy
+                .setClickListener(clickListener)
+                .build()
+                .show();
         finish();
     }
 }
