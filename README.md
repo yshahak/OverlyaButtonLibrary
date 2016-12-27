@@ -30,43 +30,24 @@ dependencies {
  }
  ```
 
+* Use the `OverlayButton.Builder` class. You can call it from any Service or BroadcastReciever or any other component in your application.
 
-* Extends `OverlayButtonService` and make sure you override `onClick` method:
+
+````java
+new OverlayButton.Builder(this)
+                .setLayoutId(R.layout.my_button) //optionally define your own layout for the Button
+                .setGravity(Gravity.BOTTOM | Gravity.END) //optionally define your desired Gravitiy
+                .setClickListener(new View.OnClickListener() {//define desired action when user click on Button
+                    @Override
+                    public void onClick(View view) {
+                        Toast.makeText(view.getContext(), "button clicked!", Toast.LENGTH_SHORT).show();
+                    }
+                }) 
+                .build()
+                .show();
+````
 
 
-```java
-public class MyService extends OverlayButtonService {
-    public MyService() {
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    @Override
-    public void onClick(View view) {
-        //here you can choose what to do when user click on the button, for example:
-        Toast.makeText(this, "button clicked!", Toast.LENGTH_SHORT).show();
-    }
-}
-```
-
-* Start your service whenever you want. You can supply your own gravity and layout file for the button by adding extras to the intent:
-
-```java
-
-        Intent intent = new Intent(this, MyService.class);
-        intent.putExtra(OverlayButtonService.EXTRA_GRAVITY, Gravity.BOTTOM | Gravity.LEFT);
-        intent.putExtra(OverlayButtonService.EXTRA_LAYOUT_ID, R.layout.my_button);
-        startService(intent);
-```
-
-Or you can simply start the `Service` like that:
-
-```java
-    startService(new Intent(this, MyService.class));
-```
 
 
 ScreenShot:
