@@ -12,7 +12,7 @@ ext {
     siteUrl = 'https://github.com/yshahak/OverlyaButtonLibrary'
     gitUrl = 'https://github.com/yshahak/OverlyaButtonLibrary.git'
 
-    libraryVersion = '1.0.0'
+    libraryVersion = '1.0.1'
 
     developerId = 'yshahak'
     developerName = 'Yaakov Shahak'

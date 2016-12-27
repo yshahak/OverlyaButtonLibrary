@@ -11,13 +11,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 
+import java.lang.ref.WeakReference;
+
+import static com.thedroidboy.www.overlaybuttonlibrary.OverlayButton.EXTRA_GRAVITY;
+import static com.thedroidboy.www.overlaybuttonlibrary.OverlayButton.EXTRA_LAYOUT_ID;
+
 /**
  * Created by yaakov shahak on 03/11/2015.
  */
-public abstract class OverlayButtonService extends Service implements View.OnClickListener {
+public class OverlayButtonService extends Service{
 
-    public static final String EXTRA_LAYOUT_ID = "extraLayoutId";
-    public static final String EXTRA_GRAVITY = "extraGravity";
+    public static WeakReference<View.OnClickListener> listenerWeakReference;
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -39,7 +43,10 @@ public abstract class OverlayButtonService extends Service implements View.OnCli
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                OverlayButtonService.this.onClick(view);
+                if (listenerWeakReference.get() != null) {
+                    listenerWeakReference.get().onClick(view);
+                }
+                listenerWeakReference = null;
                 close(view);
             }
         });
