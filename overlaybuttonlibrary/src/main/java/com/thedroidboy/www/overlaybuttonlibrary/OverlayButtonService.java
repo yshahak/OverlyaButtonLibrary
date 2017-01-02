@@ -2,9 +2,12 @@ package com.thedroidboy.www.overlaybuttonlibrary;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -19,27 +22,45 @@ import static com.thedroidboy.www.overlaybuttonlibrary.OverlayButton.EXTRA_LAYOU
 /**
  * Created by yaakov shahak on 03/11/2015.
  */
-public class OverlayButtonService extends Service{
+public class OverlayButtonService extends Service {
 
     public static WeakReference<View.OnClickListener> listenerWeakReference;
 
+    public static void start(Context context, int layoutId, int gravity) {
+        Intent intent = new Intent(context, OverlayButtonService.class);
+        intent.putExtra(EXTRA_LAYOUT_ID, layoutId);
+        intent.putExtra(EXTRA_GRAVITY, gravity);
+        context.startService(intent);
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        int layoutId = intent.getIntExtra(EXTRA_LAYOUT_ID, R.layout.button);
+        int gravityId = intent.getIntExtra(EXTRA_GRAVITY, Gravity.TOP | Gravity.START);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getApplicationContext())) {
+            PermissionReqActivity.startActivityFromService(getApplicationContext(), layoutId, gravityId);
+            stopSelf();
+            return super.onStartCommand(intent, flags, startId);
+        }
+
         WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams(
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PRIORITY_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSLUCENT);
-        layoutParams.gravity = intent.getIntExtra(EXTRA_GRAVITY, Gravity.TOP | Gravity.START);
+        layoutParams.gravity = gravityId;
         layoutParams.x = 50;
         layoutParams.y = 50;
-        int layoutId = intent.getIntExtra(EXTRA_LAYOUT_ID, R.layout.button);
+
         @SuppressLint("InflateParams")
-        View btn = ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE))
-                .inflate(layoutId, null);
+        View btn = ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(layoutId, null);
         final WindowManager windowManager = ((WindowManager) getSystemService(WINDOW_SERVICE));
+
+
         windowManager.addView(btn, layoutParams);
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,20 +75,23 @@ public class OverlayButtonService extends Service{
         return super.onStartCommand(intent, flags, startId);
     }
 
-    public void close(View view){
+    public void close(View view) {
         try {
             final WindowManager windowManager = ((WindowManager) getSystemService(WINDOW_SERVICE));
             windowManager.removeView(view);
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             stopSelf();
         }
     }
 
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+
 }
