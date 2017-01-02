@@ -3,17 +3,6 @@
 Esaily show a Button or other View on top of any other app, even when your app is in the background.
 
 #Usage
-* __In order to use this library you muse target your project to API 22 or below:__
-
-```gradle
-defaultConfig {
-        ...
-        ...
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
-    }
-```
 
 * Add the dependency from jCenter to your app's (not project) build.gradle file:
 
@@ -26,7 +15,7 @@ repositories {
 
 ```gradle
 dependencies {
-    compile 'com.thedroidboy.www.overlaybuttonlibrary:overlaybuttonlibrary:1.0.0'
+    compile 'com.thedroidboy.www.overlaybuttonlibrary:overlaybuttonlibrary:1.0.2'
  }
  ```
 
