@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         new OverlayButton.Builder(this)
                 .setLayoutId(R.layout.my_button) //optionally define your own layout for the Button
-                .setGravity(Gravity.BOTTOM | Gravity.END) //optionally define your desired Gravitiy
+                .setGravity(Gravity.BOTTOM | Gravity.END) //optionally define your desired Gravity
                 .setClickListener(clickListener)
                 .build()
                 .show();
