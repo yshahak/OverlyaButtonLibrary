@@ -33,6 +33,11 @@ new OverlayButton.Builder(this)
                 .show();
 ````
 
+* You can remove the button by calling the instance method:
+
+````java
+overlayButton.removeButton();//remove the button
+````
 
 
 
