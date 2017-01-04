@@ -12,7 +12,7 @@ ext {
     siteUrl = 'https://github.com/yshahak/OverlyaButtonLibrary'
     gitUrl = 'https://github.com/yshahak/OverlyaButtonLibrary.git'
 
-    libraryVersion = '1.0.3'
+    libraryVersion = '1.0.4'
 
     developerId = 'yshahak'
     developerName = 'Yaakov Shahak'
@@ -30,7 +30,7 @@ android {
         minSdkVersion 15
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0.3"
+        versionName libraryVersion
 
     }
     buildTypes {

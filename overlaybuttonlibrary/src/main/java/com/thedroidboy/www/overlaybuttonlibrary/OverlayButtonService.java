@@ -18,6 +18,7 @@ import android.view.WindowManager;
 
 import java.lang.ref.WeakReference;
 
+import static com.thedroidboy.www.overlaybuttonlibrary.OverlayButton.EXTRA_CLOSE;
 import static com.thedroidboy.www.overlaybuttonlibrary.OverlayButton.EXTRA_CLOSE_ON_CLICK;
 import static com.thedroidboy.www.overlaybuttonlibrary.OverlayButton.EXTRA_ENABLE_DRAGGING;
 import static com.thedroidboy.www.overlaybuttonlibrary.OverlayButton.EXTRA_GRAVITY;
@@ -31,6 +32,7 @@ public class OverlayButtonService extends Service implements View.OnDragListener
     public static WeakReference<View.OnClickListener> listenerWeakReference;
     private WindowManager.LayoutParams layoutParams;
     private WindowManager windowManager;
+    private View btn;
 
     public static void start(Context context, int layoutId, int gravity, boolean enableDragging, boolean closeOnClick) {
         Intent intent = new Intent(context, OverlayButtonService.class);
@@ -43,55 +45,59 @@ public class OverlayButtonService extends Service implements View.OnDragListener
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int layoutId = intent.getIntExtra(EXTRA_LAYOUT_ID, R.layout.button);
-        int gravityId = intent.getIntExtra(EXTRA_GRAVITY, Gravity.TOP | Gravity.START);
-        boolean enableDragging = intent.getBooleanExtra(EXTRA_ENABLE_DRAGGING, false);
-        final boolean closeOnClick = intent.getBooleanExtra(EXTRA_CLOSE_ON_CLICK, true);
-        //We have to check permission for API > 22
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getApplicationContext())) {
-            PermissionReqActivity.startActivityFromService(getApplicationContext(), layoutId, gravityId, enableDragging, closeOnClick);
-            stopSelf();
-            return super.onStartCommand(intent, flags, startId);
-        }
-        layoutParams = new WindowManager.LayoutParams(
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.WRAP_CONTENT,
-                WindowManager.LayoutParams.TYPE_PRIORITY_PHONE, //this will enable showing the button in the front
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, //we want to catch touches outside
-                PixelFormat.TRANSLUCENT);
-        layoutParams.gravity = gravityId;
-        //let's add some gravity
-        layoutParams.x = 50;
-        layoutParams.y = 50;
-
-        @SuppressLint("InflateParams")
-        View btn = ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(layoutId, null);
-        windowManager = ((WindowManager) getSystemService(WINDOW_SERVICE));
-        windowManager.addView(btn, layoutParams);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (listenerWeakReference.get() != null) {
-                    listenerWeakReference.get().onClick(view);
-                }
-                if (closeOnClick) {
-                    close(view);
-                }
+        if (intent.getBooleanExtra(EXTRA_CLOSE, false)){
+            close(btn);
+        } else {
+            int layoutId = intent.getIntExtra(EXTRA_LAYOUT_ID, R.layout.button);
+            int gravityId = intent.getIntExtra(EXTRA_GRAVITY, Gravity.TOP | Gravity.START);
+            boolean enableDragging = intent.getBooleanExtra(EXTRA_ENABLE_DRAGGING, false);
+            final boolean closeOnClick = intent.getBooleanExtra(EXTRA_CLOSE_ON_CLICK, true);
+            //We have to check permission for API > 22
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getApplicationContext())) {
+                PermissionReqActivity.startActivityFromService(getApplicationContext(), layoutId, gravityId, enableDragging, closeOnClick);
+                stopSelf();
+                return super.onStartCommand(intent, flags, startId);
             }
-        });
-        if (enableDragging){
-            btn.setOnLongClickListener(this);
-        }
+            layoutParams = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.WRAP_CONTENT,
+                    WindowManager.LayoutParams.TYPE_PRIORITY_PHONE, //this will enable showing the button in the front
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, //we want to catch touches outside
+                    PixelFormat.TRANSLUCENT);
+            layoutParams.gravity = gravityId;
+            //let's add some gravity
+            layoutParams.x = 50;
+            layoutParams.y = 50;
 
-        return super.onStartCommand(intent, flags, startId);
+            btn = ((LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE)).inflate(layoutId, null);
+            windowManager = ((WindowManager) getSystemService(WINDOW_SERVICE));
+            windowManager.addView(btn, layoutParams);
+
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listenerWeakReference.get() != null) {
+                        listenerWeakReference.get().onClick(view);
+                    }
+                    if (closeOnClick) {
+                        close(view);
+                    }
+                }
+            });
+            if (enableDragging) {
+                btn.setOnLongClickListener(this);
+            }
+        }
+        return START_NOT_STICKY;
     }
 
     public void close(View view) {
         listenerWeakReference = null;
         try {
-            final WindowManager windowManager = ((WindowManager) getSystemService(WINDOW_SERVICE));
-            windowManager.removeView(view);
+            if (view != null) {
+                final WindowManager windowManager = ((WindowManager) getSystemService(WINDOW_SERVICE));
+                windowManager.removeView(view);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

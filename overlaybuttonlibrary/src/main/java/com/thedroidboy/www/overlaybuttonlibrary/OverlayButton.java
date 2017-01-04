@@ -2,6 +2,7 @@ package com.thedroidboy.www.overlaybuttonlibrary;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.LayoutRes;
 import android.view.Gravity;
 import android.view.View;
@@ -24,6 +25,7 @@ public class OverlayButton {
     static final String EXTRA_GRAVITY = "extraGravity";
     static final String EXTRA_ENABLE_DRAGGING = "extraDragging";
     static final String EXTRA_CLOSE_ON_CLICK = "extraCloseOnClick";
+    static final String EXTRA_CLOSE = "extraClose";
 
     private WeakReference<Context> mContext;
     private int layoutId = R.layout.button;
@@ -128,5 +130,15 @@ public class OverlayButton {
         }
     }
 
-
+    /**
+     * remove the display button from UI
+     */
+    public void removeButton(){
+        Context context = mContext.get();
+        if (context != null) {
+            Intent intent = new Intent(context, OverlayButtonService.class);
+            intent.putExtra(EXTRA_CLOSE, true);
+            context.startService(intent);
+        }
+    }
 }
