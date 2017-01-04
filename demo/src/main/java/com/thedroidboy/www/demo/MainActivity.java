@@ -15,6 +15,8 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View view) {
             Toast.makeText(view.getContext(), "button clicked!", Toast.LENGTH_SHORT).show();
             clickListener = null;
+            finish();
+
         }
     };
 
@@ -22,11 +24,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         new OverlayButton.Builder(this)
-                .setLayoutId(R.layout.my_button) //optionally define your own layout for the Button
+//                .setLayoutId(R.layout.my_button) //optionally define your own layout for the Button
                 .setGravity(Gravity.BOTTOM | Gravity.END) //optionally define your desired Gravity
-                .setClickListener(clickListener)
+                .setClickListener(clickListener) //add optional View.OnClickListener
+                .setEnableDragging(true)         //whether enable dragging. default is false
+                .setRemoveOnClick(true)          //whether remove button after click. default is true
                 .build()
                 .show();
-        finish();
     }
 }
