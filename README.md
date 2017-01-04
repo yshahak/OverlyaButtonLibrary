@@ -25,13 +25,10 @@ dependencies {
 ````java
 new OverlayButton.Builder(this)
                 .setLayoutId(R.layout.my_button) //optionally define your own layout for the Button
-                .setGravity(Gravity.BOTTOM | Gravity.END) //optionally define your desired Gravitiy
-                .setClickListener(new View.OnClickListener() {//define desired action when user click on Button
-                    @Override
-                    public void onClick(View view) {
-                        Toast.makeText(view.getContext(), "button clicked!", Toast.LENGTH_SHORT).show();
-                    }
-                }) 
+                .setGravity(Gravity.BOTTOM | Gravity.END) //optionally define your desired Gravity
+                .setClickListener(clickListener) //add optional View.OnClickListener
+                .setEnableDragging(true)         //whether enable dragging. default is false
+                .setRemoveOnClick(true)          //whether remove button after click. default is true
                 .build()
                 .show();
 ````
